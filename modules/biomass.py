@@ -191,7 +191,7 @@ class Cohort:
                 material['firewood'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_firewood']
 
                 remove = self.compartments['roots'].biomass * fraction
-                # turnovers['roots'] += remove * self.compartments['roots'].carbon_content
+                turnover['roots'] += remove * self.compartments['roots'].carbon_content
                 self.compartments['roots'].biomass -= remove
 
                 self.age = -1 if i == len(self.thinning_harvest) - 1 else self.age
@@ -249,7 +249,10 @@ class Biomass:
 
     @property
     def biomass(self):
-        return sum(map(lambda a: a.biomass, self.cohorts.values()))
+        biomass_s = dict()
+        for name, cohort in self.cohorts.items():
+            biomass_s[name] = cohort.biomass
+        return biomass_s
 
 
 if __name__ == '__main__':

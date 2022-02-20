@@ -8,22 +8,30 @@ from modules.soil import Soil
 
 class Stimulator:
     def __init__(self, biomass_config: dict, soil_config: dict, products_config: dict):
-        self.biomass = Biomass(biomass_config)
-        self.soil = Soil(**soil_config)
-        self.products = Products(**products_config)
+        self.modules = {
+            'biomass': Biomass(biomass_config),
+            'soil': Soil(**soil_config),
+            'products': Products(**products_config)
+        }
+
+        self.carbon_table = list()
+        self.biomass_table = list()
 
     def __call__(self, years):
         for i in range(years):
             self.iterate()
 
     def iterate(self):
-        material, turnovers = self.biomass()
-        self.soil(turnovers)
-        self.products(**material)
+        material, turnovers = self.modules['biomass']()
+        self.modules['soil'](turnovers)
+        self.modules['products'](**material)
+
+        self.carbon_table.append(self.carbon)
+        self.biomass_table.append(self.modules['biomass'].biomass)
 
     @property
     def carbon(self):
-        return sum(map(lambda a: a.carbon, self.__dict__.values()))
+        return sum(map(lambda a: a.carbon, self.modules.values()))
 
 
 if __name__ == '__main__':
@@ -37,8 +45,8 @@ if __name__ == '__main__':
         soil_carbon.append(sim.soil.carbon)
         products_carbon.append(sim.products.carbon)
         sim.iterate()
-    # plt.plot(years, total_carbon)
-    plt.plot(years, biomass_carbon)
-    plt.plot(years, soil_carbon)
-    plt.plot(years, products_carbon)
+    plt.plot(years, total_carbon, color='yellow')
+    plt.plot(years, biomass_carbon, color='red')
+    plt.plot(years, soil_carbon, color='green')
+    plt.plot(years, products_carbon, color='blue')
     plt.show()
