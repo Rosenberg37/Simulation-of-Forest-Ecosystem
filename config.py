@@ -1,5 +1,10 @@
 from modules.biomass import Cohort
 
+OPTIM_OPTIONS = {
+    'years': 100,
+    'max_iter': 500,
+}
+
 BIOMASS_CONFIG = [
     {
         'cohort_type': Cohort.CohortType.coniferous,

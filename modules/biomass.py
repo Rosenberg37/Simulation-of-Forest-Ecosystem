@@ -3,7 +3,7 @@ from enum import Enum
 from matplotlib import pyplot as plt
 
 import config
-import utils
+from modules import utils
 
 
 class Impact:
@@ -157,8 +157,8 @@ class Cohort:
             })
 
         self.stem = Stem(**stem_kargs)
-        self.compartments = compartments_kargs
-        for name, kargs in self.compartments.items():
+        self.compartments = dict()
+        for name, kargs in compartments_kargs.items():
             self.compartments[name] = Compartment(**kargs)
 
     def __call__(self) -> tuple[dict, dict]:
