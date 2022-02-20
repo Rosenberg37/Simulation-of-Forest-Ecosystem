@@ -61,7 +61,7 @@ class Stem:
         :param age: this age of the cohort
         :return:
             the growth biomass of this year.
-            the turnover stem biomass of this year
+            the turnover carbon amount of this year
         """
         growth = self.trans2biomass(utils.polygonal(self.CAIs, age))
         self.biomass += growth
@@ -72,7 +72,7 @@ class Stem:
         turnover = (nature_rate + manage_rate) * self.biomass
         self.biomass -= turnover
 
-        return growth, turnover
+        return growth, turnover * self.carbon_content
 
     @property
     def carbon(self):
@@ -105,12 +105,12 @@ class Compartment:
         grow with stem and then turnover.
         :param growth_stem: the growth of biomass of the stem this year
         :param age: this age of the cohort
-        :return: the turnover amount to soil module.
+        :return: the turnover carbon amount to soil module.
 R       """
         self.biomass += growth_stem * utils.polygonal(self.relative_growth, age)
         turnover = self.turnover_rate * self.biomass
         self.biomass -= turnover
-        return turnover
+        return turnover * self.carbon_content
 
     @property
     def carbon(self):
@@ -144,10 +144,10 @@ class Cohort:
             self.thinning_harvest.append({
                 'age': thinning_harvest_dict['age'][i],
                 'fraction': thinning_harvest_dict['fraction'][i],
-                'stem': {
-                    'LogWood': thinning_harvest_dict['stem']['LogWood'][i],
-                    'PulpPap': thinning_harvest_dict['stem']['PulpPap'][i],
-                    'Slash': thinning_harvest_dict['stem']['Slash'][i],
+                'stems': {
+                    'LogWood': thinning_harvest_dict['stems']['LogWood'][i],
+                    'PulpPap': thinning_harvest_dict['stems']['PulpPap'][i],
+                    'Slash': thinning_harvest_dict['stems']['Slash'][i],
                 },
                 'branches': {
                     'LogWood': thinning_harvest_dict['branches']['LogWood'][i],
@@ -163,11 +163,7 @@ class Cohort:
 
     def __call__(self) -> tuple[dict, dict]:
         growth, stem_turnover = self.stem(self.age)
-        turnovers = {
-            'foliage': None,
-            'branches': None,
-            'roots': None
-        }
+        turnovers = {'stems': stem_turnover}
         for name, com in self.compartments.items():
             turnovers[name] = com(growth, self.age)
         self.age += 1
@@ -180,24 +176,18 @@ class Cohort:
         for i, harvest in enumerate(self.thinning_harvest):
             if harvest['age'] == self.age:
                 fraction = harvest['fraction']
-                total_remove = 0
 
-                for com, com_h in zip([self.stem, self.compartments['branches']], [harvest['stem'], harvest['branches']]):
+                for com, com_h in zip([self.stem, self.compartments['branches']], [harvest['stems'], harvest['branches']]):
                     remove = com.biomass * fraction
-                    total_remove += remove
                     com.biomass -= remove
 
                     material['LogWood'] += remove * com_h['LogWood']
                     material['PulpPap'] += remove * com_h['PulpPap']
                     material['Slash'] += remove * com_h['Slash']
-                remove = self.compartments['foliage'].biomass * fraction
-                material['Slash'] += self.compartments['foliage'].biomass
+                remove = self.compartments['foliage'].carbon * fraction
+                material['Slash'] += remove
                 self.compartments['foliage'].biomass -= remove
-                total_remove += remove
-
-                remove = self.compartments['roots'].biomass * fraction
-                self.compartments['roots'].biomass -= remove
-                total_remove += self.compartments['roots'].biomass * fraction
+                self.compartments['roots'].biomass *= (1 - fraction)
 
                 remove_volume = self.stem.biomass * fraction / self.stem.wood_density
                 self.stem.impacts.append(Impact(self.management_mortality, remove_volume))
@@ -212,7 +202,7 @@ class Cohort:
 
     @property
     def biomass(self):
-        return self.stem.biomass + sum(map(lambda a: a.biomass, self.compartments.values()))
+        return self.stem.biomass + sum(map(lambda a: a.carbon, self.compartments.values()))
 
 
 class Biomass:
@@ -222,13 +212,24 @@ class Biomass:
     def __call__(self):
         turnovers, materials = zip(*[coh() for coh in self.cohorts])
 
-        material = {
-            'LogWood': sum(map(lambda a: a['LogWood'], materials)),
-            'PulpPap': sum(map(lambda a: a['PulpPap'], materials)),
-            'Slash': sum(map(lambda a: a['Slash'], materials))
-        }
+        material = dict()
+        for key in materials[0].keys():
+            material[key] = sum(map(lambda a: a[key], materials))
 
-        return material
+        turnover = dict()
+        for key in turnovers[0].keys():
+            if key == 'roots':
+                turnover['fine_roots'] = 0
+                turnover['coarse_roots'] = 0
+                for t in turnovers:
+                    root = t['roots']
+                    rate = t['foliage'] / (t['branches'] + t['foliage'])
+                    turnover['fine_roots'] += rate * root
+                    turnover['coarse_roots'] += (1 - rate) * root
+            else:
+                turnover[key] = sum(map(lambda a: a[key], turnovers))
+
+        return material, turnover
 
     @property
     def carbon(self):
@@ -236,11 +237,11 @@ class Biomass:
 
     @property
     def biomass(self):
-        return sum(map(lambda a: a.biomass, self.cohorts))
+        return sum(map(lambda a: a.carbon, self.cohorts))
 
 
 if __name__ == '__main__':
-    module = Biomass(config.BIOMASS_OPTIONS)
+    module = Biomass(config.BIOMASS_CONFIG)
     years, biomass = list(range(200)), list()
     for i in years:
         biomass.append(module.biomass)

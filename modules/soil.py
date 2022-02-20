@@ -57,7 +57,7 @@ class Soil:
 
 
 if __name__ == '__main__':
-    module = Soil(**config.SOIL_OPTIONS)
+    module = Soil(**config.SOIL_CONFIG)
     years, biomass = list(range(100)), list()
     for i in years:
         biomass.append(module.carbon)

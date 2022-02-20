@@ -1,6 +1,6 @@
 from modules.biomass import Cohort
 
-BIOMASS_OPTIONS = [
+BIOMASS_CONFIG = [
     {
         'cohort_type': Cohort.CohortType.coniferous,
         'management_mortality_dict': {
@@ -53,7 +53,7 @@ BIOMASS_OPTIONS = [
         'thinning_harvest_dict': {
             'age': [25, 45, 55, 70, 95],
             'fraction': [.2, .2, .2, .2, 1.],
-            'stem': {
+            'stems': {
                 'LogWood': [0, .3, .35, .55, .7],
                 'PulpPap': [.7, .6, .55, .4, .25],
                 'Slash': [0.30, 0.10, 0.10, 0.05, 0.05],
@@ -67,16 +67,16 @@ BIOMASS_OPTIONS = [
     }
 ]
 
-SOIL_OPTIONS = {
+SOIL_CONFIG = {
     'initial_carbons': {
-        "x_nwl": 100,  # weight of organic carbon in non-woody litter compartment
-        "x_fwl": 100,  # weight of organic carbon in fine-woody litter compartment
-        "x_cwl": 100,  # weight of organic carbon in coarse-woody litter compartment
-        "x_ext": 100,  # weight of organic carbon in each decomposition compartment extractives
-        "x_cel": 100,  # weight of organic carbon in each decomposition compartment celluloses
-        "x_lig": 100,  # weight of organic carbon in each decomposition compartment lignin-like compounds
-        "x_hum1": 100,  # weight of organic carbon in each decomposition compartment simple humus
-        "x_hum2": 100,  # weight of organic carbon in each decomposition compartment complicated humus
+        "x_nwl": 0,  # weight of organic carbon in non-woody litter compartment
+        "x_fwl": 0,  # weight of organic carbon in fine-woody litter compartment
+        "x_cwl": 0,  # weight of organic carbon in coarse-woody litter compartment
+        "x_ext": 0,  # weight of organic carbon in each decomposition compartment extractives
+        "x_cel": 0,  # weight of organic carbon in each decomposition compartment celluloses
+        "x_lig": 0,  # weight of organic carbon in each decomposition compartment lignin-like compounds
+        "x_hum1": 0,  # weight of organic carbon in each decomposition compartment simple humus
+        "x_hum2": 0,  # weight of organic carbon in each decomposition compartment complicated humus
     },
     'invasion_rates': {
         "a_nwl": 1,  # invasion rates of litter by microbes of non-woody litter
