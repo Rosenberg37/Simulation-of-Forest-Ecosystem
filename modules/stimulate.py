@@ -12,10 +12,11 @@ class Stimulator:
         self.soil = Soil(**soil_config)
         self.products = Products(**products_config)
 
-    def __call__(self):
-        material, turnover = self.biomass()
-        self.soil(**turnover)
-        self.products(**material)
+    def __call__(self, years):
+        for i in range(years):
+            material, turnover = self.biomass()
+            self.soil(**turnover)
+            self.products(**material)
 
     @property
     def carbon(self):

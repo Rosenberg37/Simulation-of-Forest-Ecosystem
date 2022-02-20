@@ -1,8 +1,8 @@
 from modules.biomass import Cohort
 
 OPTIM_OPTIONS = {
-    'years': 100,
-    'max_iter': 500,
+    'years': 5,
+    'max_iter': 100,
 }
 
 BIOMASS_CONFIG = [
