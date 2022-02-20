@@ -20,12 +20,16 @@ class Stimulator:
 
 
 if __name__ == '__main__':
-    module = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG)
-    years, carbon = list(range(500)), list()
+    sim = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG)
+    years = list(range(500))
+    total_carbon, biomass_carbon, soil_carbon = list(), list(), list()
+
     for i in years:
-        carbon.append(module.carbon)
-        print(f"Year:{i},"
-              f"Carbon:{module.carbon}")
-        module()
-    plt.plot(years, carbon)
+        total_carbon.append(sim.carbon)
+        biomass_carbon.append(sim.biomass.carbon)
+        soil_carbon.append(sim.soil.carbon)
+        sim()
+    plt.plot(years, total_carbon, label='total')
+    plt.plot(years, biomass_carbon, label='biomass')
+    plt.plot(years, soil_carbon, label='soil')
     plt.show()

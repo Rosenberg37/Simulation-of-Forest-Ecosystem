@@ -108,3 +108,100 @@ SOIL_CONFIG = {
         "c_cwl_lig": 0.6,  # concentration of compound group lignin-like compounds in litter type coarse-woody
     }
 }
+
+PRODUCTS_CONFIG = {
+    'allocation': {
+        'logwood': {
+            'sawnwood': 0.4,
+            'boards': 0,
+            'paper': 0,
+            'firewood': 0.6
+        },
+        'pulpwood': {
+            'boards': 0,
+            'paper': 0,
+            'firewood': 1
+        },
+    },
+    'losses': {
+        'sawnwood': {
+            'boards': 0.10,
+            'paper': 0.12,
+            'firewood': 0.35,
+            'mile_site_dump': 0.2
+        },
+        'boards': {
+            'paper': 0.05,
+            'firewood': 0.2,
+            'mile_site_dump': 0.2
+        },
+        'paper': {
+            'firewood': 0.2,
+            'mile_site_dump': 0.2
+        },
+        'firewood': {
+            'mile_site_dump': 0.05
+        }
+    },
+    'end_products_kargs': {
+        'products': {
+            'long': 100,
+            'medium': 100,
+            'short': 100,
+            'land_fill': 100,
+            'mile_site_dump': 100
+        },
+        'allocation': {
+            'sawnwood': {
+                'long': 0.8,
+                'medium': 0.19,
+                'short': 0.01
+            },
+            'boards': {
+                'long': 0.10,
+                'medium': 0.30,
+                'short': 0.600000
+            },
+            'paper': {
+                'long': 0,
+                'medium': 0.04,
+                'short': 0.960000
+            },
+        },
+        'end_of_life': {
+            'long': {
+                'recycling': 0.02,
+                'land_fill': 0.680000,
+            },
+            'medium': {
+                'recycling': 0.04,
+                'land_fill': 0.660000,
+            },
+            'short': {
+                'recycling': 0.15,
+                'land_fill': 0.450000,
+            }
+        },
+        'recycle': {
+            'long': {
+                'long': 0,
+                'medium': 0.2,
+                'short': 0.8
+            },
+            'medium': {
+                'medium': 0.1,
+                'short': 0.9
+            },
+            'short': {
+                'short': 0
+            },
+        },
+        'life_span': {
+            'long': 14,
+            'medium': 7,
+            'short': 1,
+            'mile_site_dump': 7,
+            'land_fill': 35,
+        }
+    }
+}
