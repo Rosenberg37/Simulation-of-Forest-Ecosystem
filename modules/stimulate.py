@@ -14,9 +14,12 @@ class Stimulator:
 
     def __call__(self, years):
         for i in range(years):
-            material, turnover = self.biomass()
-            self.soil(**turnover)
-            self.products(**material)
+            self.iterate()
+
+    def iterate(self):
+        material, turnover = self.biomass()
+        self.soil(**turnover)
+        self.products(**material)
 
     @property
     def carbon(self):
@@ -33,7 +36,7 @@ if __name__ == '__main__':
         biomass_carbon.append(sim.biomass.carbon)
         soil_carbon.append(sim.soil.carbon)
         products_carbon.append(sim.products.carbon)
-        sim()
+        sim.iterate()
     plt.plot(years, total_carbon, label='total')
     plt.plot(years, biomass_carbon, label='biomass')
     plt.plot(years, soil_carbon, label='soil')

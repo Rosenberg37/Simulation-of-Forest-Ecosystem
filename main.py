@@ -26,4 +26,4 @@ if __name__ == '__main__':
         ub=[1] * years
     )
     best_x, best_y = ga.run()
-    print('best_fraction', best_x, '\n', 'max_carbon:', best_y)
+    print('best_fraction', best_x, '\n', 'max_carbon:', -best_y)

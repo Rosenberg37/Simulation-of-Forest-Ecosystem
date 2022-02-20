@@ -1,5 +1,3 @@
-from enum import Enum
-
 from matplotlib import pyplot as plt
 
 import config
@@ -13,16 +11,29 @@ class Impact:
             _, self.start_mort, self.impact_time = management_mortality[0]
             self.t = self.impact_time + 1
         else:
-            mortality = sorted(management_mortality, key=lambda a: a[0])
-            for m in mortality:
+            mort = sorted(management_mortality, key=lambda a: a[0])
+
+            v1 = self.start_mort1 = self.impact_time1 = None
+            v2 = self.start_mort2 = self.impact_time2 = None
+            for m in mort:
                 if m[0] <= volume:  # find the lower bound
                     v1, self.start_mort1, self.impact_time1 = m
-            for m in reversed(mortality):
+            for m in reversed(mort):
                 if m[0] >= volume:  # find the upper bound
                     v2, self.start_mort2, self.impact_time2 = m
-            self.t = max(self.impact_time1, self.impact_time2) + 1
-            self.factor1 = (volume - v1) / (v2 - v1)
-            self.factor2 = (v2 - volume) / (v2 - v1)
+
+            if v1 is None:
+                self.single = True
+                _, self.start_mort, self.impact_time = mort[0]
+                self.t = self.impact_time + 1
+            elif v2 is None:
+                self.single = True
+                _, self.start_mort, self.impact_time = mort[-1]
+                self.t = self.impact_time + 1
+            else:
+                self.t = max(self.impact_time1, self.impact_time2) + 1
+                self.factor1 = (volume - v1) / (v2 - v1)
+                self.factor2 = (v2 - volume) / (v2 - v1)
 
     def __call__(self):
         self.t -= 1
@@ -55,34 +66,27 @@ class Stem:
         self.biomass = initial_carbon / self.carbon_content
         self.impacts = list()
 
-    def __call__(self, age: int):
+    def __call__(self, bio_rate: float):
         """
 
-        :param age: this age of the cohort
+        :param bio_rate: current biomass / maximum above ground biomass in the cohort
         :return:
             the growth biomass of this year.
             the turnover carbon amount of this year
         """
-        growth = self.trans2biomass(utils.polygonal(self.CAIs, age))
-        self.biomass += growth
+        growth = utils.polygonal(self.CAIs, bio_rate) * self.wood_density
 
-        nature_rate = utils.polygonal(self.mortality, age)
+        nature_rate = utils.polygonal(self.mortality, bio_rate)
         manage_rate = sum(map(lambda a: a(), self.impacts))
         self.impacts = list(filter(lambda a: a.not_done, self.impacts))
         turnover = (nature_rate + manage_rate) * self.biomass
-        self.biomass -= turnover
 
-        return growth, turnover * self.carbon_content
+        self.biomass += growth - turnover * self.carbon_content
+        return growth, turnover
 
     @property
     def carbon(self):
         return self.biomass * self.carbon_content
-
-    def trans2volume(self, biomass):
-        return biomass / self.wood_density
-
-    def trans2biomass(self, volume):
-        return volume * self.wood_density
 
 
 class Compartment:
@@ -100,14 +104,14 @@ class Compartment:
 
         self.biomass = initial_carbon / self.carbon_content
 
-    def __call__(self, growth_stem: float, age: int):
+    def __call__(self, growth_stem: float, bio_rate: int):
         """
         grow with stem and then turnover.
         :param growth_stem: the growth of biomass of the stem this year
-        :param age: this age of the cohort
+        :param bio_rate: current biomass / maximum above ground biomass in the cohort
         :return: the turnover carbon amount to soil module.
 R       """
-        self.biomass += growth_stem * utils.polygonal(self.relative_growth, age)
+        self.biomass += growth_stem * utils.polygonal(self.relative_growth, bio_rate)
         turnover = self.turnover_rate * self.biomass
         self.biomass -= turnover
         return turnover * self.carbon_content
@@ -118,24 +122,19 @@ R       """
 
 
 class Cohort:
-    class CohortType(Enum):
-        # This latter information is used to characterise the quality of the litter input to the soil module.
-        coniferous = 0
-        broadleaved = 1
-
-    # growth function defined by age.
     def __init__(
             self,
-            cohort_type: CohortType,
+            initial_age: int,
+            maximum_biomass: float,
             thinning_harvest_dict: dict,
             stem_kargs: dict,
             compartments_kargs: dict,
             management_mortality_dict: dict,
             competition: list[tuple] = None,
-            initial_age: int = 0,
+
     ):
         self.age = initial_age
-        self.cohort_type = cohort_type
+        self.maximum_biomass = maximum_biomass
         self.competition = competition  # TODO(implement)
         self.management_mortality = list(zip(*management_mortality_dict.values()))
 
@@ -162,11 +161,11 @@ class Cohort:
             self.compartments[name] = Compartment(**kargs)
 
     def __call__(self) -> tuple[dict, dict]:
-        growth, stem_turnover = self.stem(self.age)
+        bio_rate = self.biomass / self.maximum_biomass
+        growth, stem_turnover = self.stem(bio_rate)
         turnovers = {'stems': stem_turnover}
         for name, com in self.compartments.items():
-            turnovers[name] = com(growth, self.age)
-        self.age += 1
+            turnovers[name] = com(growth, bio_rate)
 
         material = {
             'logwood': 0,
@@ -194,6 +193,7 @@ class Cohort:
                 if i == len(self.thinning_harvest) - 1:
                     self.age = 0
 
+        self.age += 1
         return turnovers, material
 
     @property
