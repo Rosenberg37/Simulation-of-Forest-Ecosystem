@@ -9,7 +9,7 @@ bar = tqdm()
 
 def optim(fraction: list):
     configs = config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG
-    configs[0]['canopy']['thinning_harvest_dict']['fraction'] = fraction
+    configs[0]['pine']['thinning_harvest_dict']['fraction'] = fraction
     stimulator = Stimulator(*configs)
     stimulator(100)
     bar.update()

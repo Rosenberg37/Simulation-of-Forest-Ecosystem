@@ -47,7 +47,7 @@ class Products:
         self.losses = losses
         self.end_products = EndProducts(**end_products_kargs)
 
-    def __call__(self, logwood: float, pulpwood: float, slash: float):
+    def __call__(self, logwood: float, pulpwood: float):
         commodities = self.product_line(logwood, pulpwood)
         commodities.pop('firewood')
         self.end_products(commodities)
@@ -84,6 +84,6 @@ if __name__ == '__main__':
 
     for i in years:
         carbon.append(pro.carbon)
-        pro(0, 0, 0)
+        pro(10, 10, 10)
     plt.plot(years, carbon)
     plt.show()
