@@ -151,6 +151,7 @@ class Cohort:
                     'slash': thinning_harvest_dict['branches']['slash'][i],
                 },
                 'slash_soil': thinning_harvest_dict['slash_soil'][i],
+                'slash_firewood': thinning_harvest_dict['slash_firewood'][i],
             })
 
         self.compartments = {'stems': Stem(**stem_kargs)}
@@ -166,6 +167,7 @@ class Cohort:
         material = {
             'logwood': 0,
             'pulpwood': 0,
+            'firewood': 0,
         }
         for i, harvest in enumerate(self.thinning_harvest):
             if harvest['age'] == self.age:
@@ -179,12 +181,18 @@ class Cohort:
 
                     material['logwood'] += remove * harvest[name]['logwood']
                     material['pulpwood'] += remove * harvest[name]['pulpwood']
-                    turnovers[name] += remove * harvest[name]['slash'] * harvest['slash_soil']
+                    slash = remove * harvest[name]['slash']
+                    turnovers[name] += slash * harvest['slash_soil']
+                    material['firewood'] += slash * harvest['slash_firewood']
 
-                for name in ['foliage', 'roots']:
-                    remove = self.compartments[name].biomass * fraction
-                    turnovers[name] += remove * self.compartments[name].carbon_content
-                    self.compartments[name].biomass -= remove
+                remove = self.compartments['foliage'].biomass * fraction
+                self.compartments['foliage'].biomass -= remove
+                turnovers['foliage'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_soil']
+                material['firewood'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_firewood']
+
+                remove = self.compartments['roots'].biomass * fraction
+                turnovers['roots'] += remove * self.compartments['roots'].carbon_content
+                self.compartments['roots'].biomass -= remove
 
                 self.age = -1 if i == len(self.thinning_harvest) - 1 else self.age
 

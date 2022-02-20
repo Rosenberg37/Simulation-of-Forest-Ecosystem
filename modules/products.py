@@ -47,9 +47,9 @@ class Products:
         self.losses = losses
         self.end_products = EndProducts(**end_products_kargs)
 
-    def __call__(self, logwood: float, pulpwood: float):
+    def __call__(self, logwood: float, pulpwood: float, firewood: float):
         commodities = self.product_line(logwood, pulpwood)
-        commodities.pop('firewood')
+        firewood += commodities.pop('firewood')
         self.end_products(commodities)
 
     def product_line(self, logwood: float, pulpwood: float):
@@ -57,7 +57,8 @@ class Products:
             'sawnwood': 0,
             'boards': 0,
             'paper': 0,
-            'mile_site_dump': 0
+            'mile_site_dump': 0,
+            'firewood': 0
         }
 
         for key, value in self.allocation['logwood'].items():
@@ -65,11 +66,22 @@ class Products:
         for key, value in self.allocation['pulpwood'].items():
             commodities[key] = value * pulpwood
 
+        delta = {
+            'sawnwood': 0,
+            'boards': 0,
+            'paper': 0,
+            'mile_site_dump': 0,
+            'firewood': 0
+        }
         for key, value in commodities.items():
             if key != 'mile_site_dump':
-                commodities[key] = (1 - sum(self.losses[key].values())) * value
+                decrease = sum(self.losses[key].values()) * value
+                delta[key] -= decrease
                 for k, v in self.losses[key].items():
-                    commodities[k] += v * commodities[key]
+                    delta[k] += v * decrease
+
+        for key, value in delta.items():
+            commodities[key] += value
 
         return commodities
 

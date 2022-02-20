@@ -73,7 +73,7 @@ class Soil:
 
 if __name__ == '__main__':
     module = Soil(**config.SOIL_CONFIG)
-    years, biomass = list(range(100)), list()
+    years, biomass = list(range(10000)), list()
     for i in years:
         biomass.append(module.carbon)
         print(f"Year:{i},"

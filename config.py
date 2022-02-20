@@ -71,6 +71,7 @@ BIOMASS_CONFIG = {
                 'pulpwood': [0, 0, 0, 0, 0],
                 'slash': [0.90, 1.00, 1.00, 0.90, 0.90],
             },
+            'slash_firewood': [0.95, .9, .9, .95, .95],
             'slash_soil': [0.05, 0.10, 0.10, 0.05, 0.05]
         }
     },
@@ -141,6 +142,7 @@ BIOMASS_CONFIG = {
                 'pulpwood': [0, 0, 0, 0, 0],
                 'slash': [1.00, 1.00, 1.00, 1.00, 1.00],
             },
+            'slash_firewood': [.9, .9, .9, .95, .95],
             'slash_soil': [0.10, 0.10, 0.10, 0.05, 0.05]
         }
     }
@@ -218,10 +220,10 @@ SOIL_CONFIG = {
 PRODUCTS_CONFIG = {
     'allocation': {
         'logwood': {
-            'sawnwood': 0.4,
-            'boards': 0,
+            'sawnwood': 0.8,
+            'boards': 0.1,
             'paper': 0,
-            'firewood': 0.6
+            'firewood': 0.1
         },
         'pulpwood': {
             'boards': 0,
@@ -231,22 +233,22 @@ PRODUCTS_CONFIG = {
     },
     'losses': {
         'sawnwood': {
-            'boards': 0.10,
-            'paper': 0.12,
-            'firewood': 0.35,
-            'mile_site_dump': 0.2
+            'boards': 0,
+            'paper': 0.1,
+            'firewood': 0.4,
+            'mile_site_dump': 0.0
         },
         'boards': {
             'paper': 0.05,
-            'firewood': 0.2,
-            'mile_site_dump': 0.2
+            'firewood': 0.3,
+            'mile_site_dump': 0.0
         },
         'paper': {
-            'firewood': 0.2,
-            'mile_site_dump': 0.2
+            'firewood': 0.1,
+            'mile_site_dump': 0.05
         },
         'firewood': {
-            'mile_site_dump': 0.05
+            'mile_site_dump': 0
         }
     },
     'end_products_kargs': {
@@ -259,33 +261,33 @@ PRODUCTS_CONFIG = {
         },
         'allocation': {
             'sawnwood': {
-                'long': 0.8,
-                'medium': 0.19,
-                'short': 0.01
+                'long': 0.5,
+                'medium': 0.25,
+                'short': 0.250000
             },
             'boards': {
-                'long': 0.10,
-                'medium': 0.30,
-                'short': 0.600000
+                'long': 0.3,
+                'medium': .5,
+                'short': .5
             },
             'paper': {
-                'long': 0,
-                'medium': 0.04,
-                'short': 0.960000
+                'long': 0.01,
+                'medium': 0.1,
+                'short': 0.890000
             },
         },
         'end_of_life': {
             'long': {
-                'recycling': 0.02,
-                'land_fill': 0.680000,
+                'recycling': 0.1,
+                'land_fill': 0.100000,
             },
             'medium': {
-                'recycling': 0.04,
-                'land_fill': 0.660000,
+                'recycling': 0.1,
+                'land_fill': 0.100000,
             },
             'short': {
-                'recycling': 0.15,
-                'land_fill': 0.450000,
+                'recycling': 0.2,
+                'land_fill': 0.050000,
             }
         },
         'recycle': {
@@ -295,19 +297,19 @@ PRODUCTS_CONFIG = {
                 'short': 0.8
             },
             'medium': {
-                'medium': 0.1,
-                'short': 0.9
+                'medium': 0.2,
+                'short': 0.8
             },
             'short': {
                 'short': 0
             },
         },
         'life_span': {
-            'long': 14,
-            'medium': 7,
+            'long': 40,
+            'medium': 15,
             'short': 1,
-            'mile_site_dump': 7,
-            'land_fill': 35,
+            'mile_site_dump': 25,
+            'land_fill': 50,
         }
     }
 }
