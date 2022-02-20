@@ -5,6 +5,7 @@ def polygonal(points: list[tuple], center: float):
     :param center: center x coordinate
     :return: corresponding y coordinate
     """
+    points = sorted(points, key=lambda a: a[0])
     if center == 0 and points[0][0] > 0:
         return 0
     for i in range(len(points) - 1):

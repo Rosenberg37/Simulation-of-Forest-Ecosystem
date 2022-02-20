@@ -7,7 +7,7 @@ from modules.soil import Soil
 
 
 class Stimulator:
-    def __init__(self, biomass_config: list[dict], soil_config: dict, products_config: dict):
+    def __init__(self, biomass_config: dict, soil_config: dict, products_config: dict):
         self.biomass = Biomass(biomass_config)
         self.soil = Soil(**soil_config)
         self.products = Products(**products_config)
@@ -28,7 +28,7 @@ class Stimulator:
 
 if __name__ == '__main__':
     sim = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG)
-    years = list(range(500))
+    years = list(range(1000))
     total_carbon, biomass_carbon, soil_carbon, products_carbon = list(), list(), list(), list()
 
     for i in years:

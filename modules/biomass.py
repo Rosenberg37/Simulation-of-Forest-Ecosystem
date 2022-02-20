@@ -66,22 +66,23 @@ class Stem:
         self.biomass = initial_carbon / self.carbon_content
         self.impacts = list()
 
-    def __call__(self, bio_rate: float):
+    def __call__(self, mg_rate: float, age: int):
         """
 
-        :param bio_rate: current biomass / maximum above ground biomass in the cohort
+        :param mg_rate: decrease rate of growth because of competition
+        :param age: this age of the cohort
         :return:
             the growth biomass of this year.
             the turnover carbon amount of this year
         """
-        growth = utils.polygonal(self.CAIs, bio_rate) * self.wood_density
+        growth = utils.polygonal(self.CAIs, age) * self.wood_density * mg_rate
 
-        nature_rate = utils.polygonal(self.mortality, bio_rate)
+        nature_rate = utils.polygonal(self.mortality, age)
         manage_rate = sum(map(lambda a: a(), self.impacts))
         self.impacts = list(filter(lambda a: a.not_done, self.impacts))
         turnover = (nature_rate + manage_rate) * self.biomass
 
-        self.biomass += growth - turnover * self.carbon_content
+        self.biomass += growth - turnover
         return growth, turnover
 
     @property
@@ -104,14 +105,14 @@ class Compartment:
 
         self.biomass = initial_carbon / self.carbon_content
 
-    def __call__(self, growth_stem: float, bio_rate: int):
+    def __call__(self, growth_stem: float, age: int):
         """
         grow with stem and then turnover.
         :param growth_stem: the growth of biomass of the stem this year
-        :param bio_rate: current biomass / maximum above ground biomass in the cohort
+        :param age: this age of the cohort
         :return: the turnover carbon amount to soil module.
 R       """
-        self.biomass += growth_stem * utils.polygonal(self.relative_growth, bio_rate)
+        self.biomass += growth_stem * utils.polygonal(self.relative_growth, age)
         turnover = self.turnover_rate * self.biomass
         self.biomass -= turnover
         return turnover * self.carbon_content
@@ -130,12 +131,9 @@ class Cohort:
             stem_kargs: dict,
             compartments_kargs: dict,
             management_mortality_dict: dict,
-            competition: list[tuple] = None,
-
     ):
         self.age = initial_age
         self.maximum_biomass = maximum_biomass
-        self.competition = competition  # TODO(implement)
         self.management_mortality = list(zip(*management_mortality_dict.values()))
 
         self.thinning_harvest = list()
@@ -160,12 +158,11 @@ class Cohort:
         for name, kargs in compartments_kargs.items():
             self.compartments[name] = Compartment(**kargs)
 
-    def __call__(self) -> tuple[dict, dict]:
-        bio_rate = self.biomass / self.maximum_biomass
-        growth, stem_turnover = self.stem(bio_rate)
+    def __call__(self, mg_rate: float) -> tuple[dict, dict]:
+        growth, stem_turnover = self.stem(mg_rate, self.age)
         turnovers = {'stems': stem_turnover}
         for name, com in self.compartments.items():
-            turnovers[name] = com(growth, bio_rate)
+            turnovers[name] = com(growth, self.age)
 
         material = {
             'logwood': 0,
@@ -206,11 +203,27 @@ class Cohort:
 
 
 class Biomass:
-    def __init__(self, cohorts_kargs: list[dict]):
-        self.cohorts = [Cohort(**kargs) for kargs in cohorts_kargs]
+    def __init__(self, cohorts_kargs: dict):
+        self.competitions, self.cohorts = dict(), dict()
+        for key, kargs in cohorts_kargs.items():
+            kargs = kargs.copy()
+            self.competitions[key] = kargs.pop('competition')
+            self.cohorts[key] = Cohort(**kargs)
 
     def __call__(self):
-        turnovers, materials = zip(*[coh() for coh in self.cohorts])
+        turnovers, materials = list(), list()
+
+        for name, cohort in self.cohorts.items():
+            competition = self.competitions[name].copy()
+            bio_rates = competition.pop('bio_rates')
+            mg_rate = 1
+            for n, c in competition.items():
+                points = list(zip(bio_rates, c))
+                rate = self.cohorts[n].biomass / self.cohorts[n].maximum_biomass
+                mg_rate *= utils.polygonal(points, rate)
+            turnover, material = cohort(mg_rate)
+            turnovers.append(turnover)
+            materials.append(material)
 
         material = dict()
         for key in materials[0].keys():
@@ -233,16 +246,16 @@ class Biomass:
 
     @property
     def carbon(self):
-        return sum(map(lambda a: a.carbon, self.cohorts))
+        return sum(map(lambda a: a.carbon, self.cohorts.values()))
 
     @property
     def biomass(self):
-        return sum(map(lambda a: a.carbon, self.cohorts))
+        return sum(map(lambda a: a.biomass, self.cohorts.values()))
 
 
 if __name__ == '__main__':
     module = Biomass(config.BIOMASS_CONFIG)
-    years, biomass = list(range(200)), list()
+    years, biomass = list(range(1000)), list()
     for i in years:
         biomass.append(module.biomass)
         print(f"Year:{i},"

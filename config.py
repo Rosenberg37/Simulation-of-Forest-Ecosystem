@@ -3,25 +3,26 @@ OPTIM_OPTIONS = {
     'max_iter': 100,
 }
 
-BIOMASS_CONFIG = [
-    {
+BIOMASS_CONFIG = {
+    'canopy': {
         'initial_age': 0,
         'maximum_biomass': 100,
         'management_mortality_dict': {
-            'volume': [2, 5, 10, 20, 30],
-            'start_mort': [0.03, 0.03, 0.04, 0.06, 0.10],
-            'impact_time': [2, 3, 5, 7, 8]
+            'volume': [50],
+            'start_mort': [.04],
+            'impact_time': [10]
         },
         'stem_kargs': {
             'carbon_content': 0.5,
             'wood_density': 0.3,
             'CAI_dict': {
-                'bio_rates': [0.00, .05, 0.40, 0.60, 1.00],
-                'CAI': [0.1, 4.0, 3.5, 2.0, 0.01],
+                'age': [0, 10, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 140],
+                'CAI': [0.2, 6, 17.2, 19.2, 19.4, 19.4, 19.1, 18.6, 18.1, 17.4, 17, 16.4, 15.8, 15.2, 14.6, 4.4, 13.8, 13.2, 12.6,
+                        12.1, 1.6, 11, 10.6, 8],
             },
             'mortality_dict': {
-                'bio_rates': [0, 0.10, 0.25, 0.40, 0.60, 0.80, 1.0],
-                'mortality': [0.1, 0.015, 0.01, 0.3, 0.7, .99, 1.0],
+                'age': [0, 10, 20, 70, 120],
+                'mortality': [.01, .04, .04, .015, .02],
             },
         },
         'compartments_kargs': {
@@ -30,8 +31,8 @@ BIOMASS_CONFIG = [
                 'turnover_rate': .3,
                 'initial_carbon': .1,
                 'relative_growth_dict': {
-                    'bio_rates': [0.0, 0.25, 0.5, 0.75, 1.0],
-                    'relative_growth': [1.0, 0.5, 0.25, 0.1, .15]
+                    'age': [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                    'relative_growth': [1, .9, .7, .5, .5, .55, .55, .55, .6, .65, .7]
                 }
             },
             'branches': {
@@ -39,8 +40,8 @@ BIOMASS_CONFIG = [
                 'initial_carbon': 0.02,
                 'turnover_rate': 0.04,
                 'relative_growth_dict': {
-                    'bio_rates': [0.0, 0.25, 0.5, 0.75, 1.0],
-                    'relative_growth': [1.0, 0.75, 0.25, 0.1, .2]
+                    'age': [0, 1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                    'relative_growth': [0, 1, .8, .7, .5, .45, .4, .4, .45, .5, .55, .55]
                 }
             },
             'roots': {
@@ -48,10 +49,14 @@ BIOMASS_CONFIG = [
                 'turnover_rate': 0.08,
                 'initial_carbon': .1,
                 'relative_growth_dict': {
-                    'bio_rates': [0.0, 0.25, 0.5, 0.75, 1.0],
-                    'relative_growth': [0.5, 0.2, 0.15, .2, .25]
+                    'age': [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                    'relative_growth': [1, .9, .7, .5, .5, .55, .55, .55, .6, .65, .7]
                 }
             },
+        },
+        'competition': {
+            'bio_rates': [0.00, 0.25, 0.50, 0.75, 1.00],
+            'canopy': [1.000, 1.00, 1.00, 0.75, 0.10],
         },
         'thinning_harvest_dict': {
             'age': [25, 45, 55, 70, 95],
@@ -68,7 +73,7 @@ BIOMASS_CONFIG = [
             },
         }
     }
-]
+}
 
 SOIL_CONFIG = {
     'initial_carbons': {
