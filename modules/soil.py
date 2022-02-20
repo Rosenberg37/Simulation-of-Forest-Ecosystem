@@ -29,15 +29,14 @@ class Soil:
         for name, kargs in cohorts_kargs.items():
             self.cohorts[name] = CohortSoil(**kargs)
 
-    def __call__(self, foliage: float, fine_roots: float, branches: float, coarse_roots: float, stems: float):
+    def __call__(self, turnovers: dict):
+        for name, cohort in self.cohorts.items():
+            self.update(cohort, **turnovers[name])
+
+    def update(self, cohort: CohortSoil, foliage: float, fine_roots: float, branches: float, coarse_roots: float, stems: float):
         u_nwl = foliage + fine_roots
         u_fwl = branches + coarse_roots
         u_cwl = stems
-
-        for cohort in self.cohorts.values():
-            self.update(cohort, u_nwl, u_fwl, u_cwl)
-
-    def update(self, cohort: CohortSoil, u_nwl: float, u_fwl: float, u_cwl: float):
         delta_x_nwl = u_nwl - self.a_nwl * cohort.x_nwl
         delta_x_fwl = u_fwl - self.a_fwl * cohort.x_fwl
         delta_x_cwl = u_cwl - self.a_cwl * cohort.x_cwl
@@ -78,6 +77,6 @@ if __name__ == '__main__':
         biomass.append(module.carbon)
         print(f"Year:{i},"
               f"Carbon:{module.carbon}")
-        module(0, 0, 0, 0, 0)
+        module()
     plt.plot(years, biomass)
     plt.show()

@@ -160,9 +160,9 @@ class Cohort:
 
     def __call__(self, mg_rate: float) -> tuple[dict, dict]:
         growth, stem_turnover = self.compartments['stems'](mg_rate, self.age)
-        turnovers = {'stems': stem_turnover}
+        turnover = {'stems': stem_turnover}
         for name in ['foliage', 'branches', 'roots']:
-            turnovers[name] = self.compartments[name](growth, self.age)
+            turnover[name] = self.compartments[name](growth, self.age)
 
         material = {
             'logwood': 0,
@@ -182,22 +182,28 @@ class Cohort:
                     material['logwood'] += remove * harvest[name]['logwood']
                     material['pulpwood'] += remove * harvest[name]['pulpwood']
                     slash = remove * harvest[name]['slash']
-                    turnovers[name] += slash * harvest['slash_soil']
+                    turnover[name] += slash * harvest['slash_soil']
                     material['firewood'] += slash * harvest['slash_firewood']
 
                 remove = self.compartments['foliage'].biomass * fraction
                 self.compartments['foliage'].biomass -= remove
-                turnovers['foliage'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_soil']
+                turnover['foliage'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_soil']
                 material['firewood'] += remove * self.compartments['foliage'].carbon_content * harvest['slash_firewood']
 
                 remove = self.compartments['roots'].biomass * fraction
-                turnovers['roots'] += remove * self.compartments['roots'].carbon_content
+                # turnovers['roots'] += remove * self.compartments['roots'].carbon_content
                 self.compartments['roots'].biomass -= remove
 
                 self.age = -1 if i == len(self.thinning_harvest) - 1 else self.age
 
+        roots = turnover.pop('roots')
+        rate = turnover['foliage'] / (turnover['branches'] + turnover['foliage'])
+        turnover['fine_roots'] = rate * roots
+        turnover['coarse_roots'] = (1 - rate) * roots
+
         self.age += 1
-        return turnovers, material
+
+        return turnover, material
 
     @property
     def carbon(self):
@@ -205,7 +211,7 @@ class Cohort:
 
     @property
     def biomass(self):
-        return sum(map(lambda a: a.carbon, self.compartments.values()))
+        return sum(map(lambda a: a.biomass, self.compartments.values()))
 
 
 class Biomass:
@@ -217,7 +223,7 @@ class Biomass:
             self.cohorts[key] = Cohort(**kargs)
 
     def __call__(self):
-        turnovers, materials = list(), list()
+        turnovers, materials = dict(), list()
 
         for name, cohort in self.cohorts.items():
             competition = self.competitions[name].copy()
@@ -228,27 +234,14 @@ class Biomass:
                 rate = self.cohorts[n].biomass / self.cohorts[n].maximum_biomass
                 mg_rate *= utils.polygonal(points, rate)
             turnover, material = cohort(mg_rate)
-            turnovers.append(turnover)
+            turnovers[name] = turnover
             materials.append(material)
 
         material = dict()
         for key in materials[0].keys():
             material[key] = sum(map(lambda a: a[key], materials))
 
-        turnover = dict()
-        for key in turnovers[0].keys():
-            if key == 'roots':
-                turnover['fine_roots'] = 0
-                turnover['coarse_roots'] = 0
-                for t in turnovers:
-                    root = t['roots']
-                    rate = t['foliage'] / (t['branches'] + t['foliage'])
-                    turnover['fine_roots'] += rate * root
-                    turnover['coarse_roots'] += (1 - rate) * root
-            else:
-                turnover[key] = sum(map(lambda a: a[key], turnovers))
-
-        return material, turnover
+        return material, turnovers
 
     @property
     def carbon(self):

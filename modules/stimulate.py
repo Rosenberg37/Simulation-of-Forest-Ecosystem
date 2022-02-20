@@ -17,8 +17,8 @@ class Stimulator:
             self.iterate()
 
     def iterate(self):
-        material, turnover = self.biomass()
-        self.soil(**turnover)
+        material, turnovers = self.biomass()
+        self.soil(turnovers)
         self.products(**material)
 
     @property
@@ -37,8 +37,8 @@ if __name__ == '__main__':
         soil_carbon.append(sim.soil.carbon)
         products_carbon.append(sim.products.carbon)
         sim.iterate()
-    plt.plot(years, total_carbon, label='total')
-    plt.plot(years, biomass_carbon, label='biomass')
-    plt.plot(years, soil_carbon, label='soil')
-    plt.plot(years, products_carbon, label='soil')
+    # plt.plot(years, total_carbon)
+    plt.plot(years, biomass_carbon)
+    plt.plot(years, soil_carbon)
+    plt.plot(years, products_carbon)
     plt.show()

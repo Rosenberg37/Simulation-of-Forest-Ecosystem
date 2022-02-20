@@ -1,6 +1,6 @@
 OPTIM_OPTIONS = {
     'years': 5,
-    'max_iter': 100,
+    'max_iter': 200,
 }
 
 BIOMASS_CONFIG = {

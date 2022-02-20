@@ -11,7 +11,7 @@ def optim(fraction: list):
     configs = config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG
     configs[0]['pine']['thinning_harvest_dict']['fraction'] = fraction
     stimulator = Stimulator(*configs)
-    stimulator(100)
+    stimulator(75)
     bar.update()
     return -stimulator.carbon
 
