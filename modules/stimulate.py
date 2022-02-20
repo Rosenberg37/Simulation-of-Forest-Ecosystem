@@ -14,7 +14,12 @@ class Stimulator:
             'products': Products(**products_config)
         }
 
-        self.carbon_table = list()
+        self.carbon_table = {
+            'biomass': list(),
+            'soil': list(),
+            'products': list(),
+            'total': list(),
+        }
         self.biomass_table = list()
 
     def __call__(self, years):
@@ -26,7 +31,9 @@ class Stimulator:
         self.modules['soil'](turnovers)
         self.modules['products'](**material)
 
-        self.carbon_table.append(self.carbon)
+        self.carbon_table['total'].append(self.carbon)
+        for key in ['soil', 'products', 'biomass']:
+            self.carbon_table[key].append(self.modules[key].carbon)
         self.biomass_table.append(self.modules['biomass'].biomass)
 
     @property
@@ -35,18 +42,14 @@ class Stimulator:
 
 
 if __name__ == '__main__':
-    sim = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG)
-    years = list(range(100))
+    simulate = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG)
+    years = 1000
+    x = list(range(years))
     total_carbon, biomass_carbon, soil_carbon, products_carbon = list(), list(), list(), list()
 
-    for i in years:
-        total_carbon.append(sim.carbon)
-        biomass_carbon.append(sim.biomass.carbon)
-        soil_carbon.append(sim.soil.carbon)
-        products_carbon.append(sim.products.carbon)
-        sim.iterate()
-    plt.plot(years, total_carbon, color='yellow')
-    plt.plot(years, biomass_carbon, color='red')
-    plt.plot(years, soil_carbon, color='green')
-    plt.plot(years, products_carbon, color='blue')
+    simulate(years)
+    plt.plot(x, simulate.carbon_table['total'], color='yellow')
+    plt.plot(x, simulate.carbon_table['biomass'], color='red')
+    plt.plot(x, simulate.carbon_table['soil'], color='green')
+    plt.plot(x, simulate.carbon_table['products'], color='blue')
     plt.show()

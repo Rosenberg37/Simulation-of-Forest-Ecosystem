@@ -200,7 +200,7 @@ SOIL_CONFIG = {
     'invasion_rates': {
         "a_nwl": 1,  # invasion rates of litter by microbes of non-woody litter
         "a_fwl": 0.54,  # invasion rates of litter by microbes of fine-woody litter
-        "a_cwl": 0.03,  # invasion rates of litter by microbes of coarse-woody litter
+        "a_cwl": 0.077,  # invasion rates of litter by microbes of coarse-woody litter
     },
     'decomposition_rates': {
         "k_ext": 0.48,  # decomposition rate of compartment extractives
