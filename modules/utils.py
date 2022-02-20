@@ -14,4 +14,4 @@ def polygonal(points: list[tuple], center: float):
 
 
 def interpolate(center: float, left_x: int, left_y: float, right_x: int, right_y: float):
-    return (center - left_y) * (right_y - left_y) / (right_x - left_x) + left_y
+    return (center - left_x) * (right_y - left_y) / (right_x - left_x) + left_y

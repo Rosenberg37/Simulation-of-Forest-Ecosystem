@@ -46,7 +46,7 @@ BIOMASS_OPTIONS = [
                 'initial_carbon': .1,
                 'relative_growth_dict': {
                     'age': [0, 10, 20, 30, 40, 50, 60, 70, 80, 0, 100],
-                    'relative_growth': [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+                    'relative_growth': [1, .9, .7, .5, .5, .55, .55, .55, .6, .65, .7]
                 }
             },
         },
