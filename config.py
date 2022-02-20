@@ -54,14 +54,14 @@ BIOMASS_CONFIG = [
             'age': [25, 45, 55, 70, 95],
             'fraction': [.2, .2, .2, .2, 1.],
             'stems': {
-                'LogWood': [0, .3, .35, .55, .7],
-                'PulpPap': [.7, .6, .55, .4, .25],
-                'Slash': [0.30, 0.10, 0.10, 0.05, 0.05],
+                'logwood': [0, .3, .35, .55, .7],
+                'pulpwood': [.7, .6, .55, .4, .25],
+                'slash': [0.30, 0.10, 0.10, 0.05, 0.05],
             },
             'branches': {
-                'LogWood': [0, 0, 0, .05, .1],
-                'PulpPap': [.1, .1, .15, .15, .15],
-                'Slash': [0.90, 0.90, 0.85, 0.80, 0.75],
+                'logwood': [0, 0, 0, .05, .1],
+                'pulpwood': [.1, .1, .15, .15, .15],
+                'slash': [0.90, 0.90, 0.85, 0.80, 0.75],
             },
         }
     }
@@ -145,11 +145,11 @@ PRODUCTS_CONFIG = {
     },
     'end_products_kargs': {
         'products': {
-            'long': 100,
-            'medium': 100,
-            'short': 100,
-            'land_fill': 100,
-            'mile_site_dump': 100
+            'long': 0,
+            'medium': 0,
+            'short': 0,
+            'land_fill': 0,
+            'mile_site_dump': 0
         },
         'allocation': {
             'sawnwood': {

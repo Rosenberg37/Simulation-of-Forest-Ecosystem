@@ -145,14 +145,14 @@ class Cohort:
                 'age': thinning_harvest_dict['age'][i],
                 'fraction': thinning_harvest_dict['fraction'][i],
                 'stems': {
-                    'LogWood': thinning_harvest_dict['stems']['LogWood'][i],
-                    'PulpPap': thinning_harvest_dict['stems']['PulpPap'][i],
-                    'Slash': thinning_harvest_dict['stems']['Slash'][i],
+                    'logwood': thinning_harvest_dict['stems']['logwood'][i],
+                    'pulpwood': thinning_harvest_dict['stems']['pulpwood'][i],
+                    'slash': thinning_harvest_dict['stems']['slash'][i],
                 },
                 'branches': {
-                    'LogWood': thinning_harvest_dict['branches']['LogWood'][i],
-                    'PulpPap': thinning_harvest_dict['branches']['PulpPap'][i],
-                    'Slash': thinning_harvest_dict['branches']['Slash'][i],
+                    'logwood': thinning_harvest_dict['branches']['logwood'][i],
+                    'pulpwood': thinning_harvest_dict['branches']['pulpwood'][i],
+                    'slash': thinning_harvest_dict['branches']['slash'][i],
                 },
             })
 
@@ -169,9 +169,9 @@ class Cohort:
         self.age += 1
 
         material = {
-            'LogWood': 0,
-            'PulpPap': 0,
-            'Slash': 0
+            'logwood': 0,
+            'pulpwood': 0,
+            'slash': 0
         }
         for i, harvest in enumerate(self.thinning_harvest):
             if harvest['age'] == self.age:
@@ -181,11 +181,11 @@ class Cohort:
                     remove = com.biomass * fraction
                     com.biomass -= remove
 
-                    material['LogWood'] += remove * com_h['LogWood']
-                    material['PulpPap'] += remove * com_h['PulpPap']
-                    material['Slash'] += remove * com_h['Slash']
+                    material['logwood'] += remove * com_h['logwood']
+                    material['pulpwood'] += remove * com_h['pulpwood']
+                    material['slash'] += remove * com_h['slash']
                 remove = self.compartments['foliage'].carbon * fraction
-                material['Slash'] += remove
+                material['slash'] += remove
                 self.compartments['foliage'].biomass -= remove
                 self.compartments['roots'].biomass *= (1 - fraction)
 

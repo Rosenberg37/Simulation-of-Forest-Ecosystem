@@ -31,7 +31,7 @@ class EndProducts:
             for k, v in self.recycle[key].items():
                 delta[k] += v * recycle
         for key in ['land_fill', 'mile_site_dump']:
-            delta[key] -= self.factor / self.life_span[key]
+            delta[key] -= self.products[key] * self.factor / self.life_span[key]
 
         for key, value in delta.items():
             self.products[key] += value
