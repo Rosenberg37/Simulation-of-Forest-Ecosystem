@@ -1,5 +1,5 @@
 OPTIM_OPTIONS = {
-    'years': 5,
+    'years': 10,
     'max_iter': 200,
 }
 
@@ -62,96 +62,24 @@ BIOMASS_CONFIG = {
             'pine': [1, .9, .7, .4, 0],
         },
         'thinning_harvest_dict': {
-            'age': [10, 20, 30, 40, 50],
-            'fraction': [0.80, 0.350, 0.350, 0.350, 0.8],
+            'age': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            'fraction': [9.83977436e-01,9.98393714e-01,8.01328170e-01,9.98279035e-01,
+                         8.00577509e-01,6.57885710e-01,5.28693231e-05,9.37378522e-01,
+                         4.62808219e-01,2.91255730e-01],
             'stems': {
-                'logwood': [0.7, 0.42, 0.42, 0.7, 0.7],
-                'pulpwood': [0.2, 0.58, 0.58, 0.2, 0.2],
-                'slash': [0.10, 0.00, 0.00, 0.10, 0.10],
+                'logwood': [0.7, 0.42, 0.42, 0.7, 0.7, 0.7, 0.42, 0.42, 0.7, 0.7],
+                'pulpwood': [0.2, 0.58, 0.58, 0.2, 0.2, 0.2, 0.58, 0.58, 0.2, 0.2],
+                'slash': [0.10, 0.00, 0.00, 0.10, 0.10, 0.10, 0.00, 0.00, 0.10, 0.10],
             },
             'branches': {
-                'logwood': [0.1, 0, 0, 0.1, 0.1],
-                'pulpwood': [0, 0, 0, 0, 0],
-                'slash': [0.90, 1.00, 1.00, 0.90, 0.90],
+                'logwood': [0.1, 0, 0, 0.1, 0.1, 0.1, 0, 0, 0.1, 0.1],
+                'pulpwood': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'slash': [0.90, 1.00, 1.00, 0.90, 0.90, 0.90, 1.00, 1.00, 0.90, 0.90],
             },
-            'slash_firewood': [0.95, .9, .9, .95, .95],
-            'slash_soil': [0.05, 0.10, 0.10, 0.05, 0.05]
+            'slash_firewood': [0.95, .9, .9, .95, .95, 0.95, .9, .9, .95, .95],
+            'slash_soil': [0.05, 0.10, 0.10, 0.05, 0.05, 0.05, 0.10, 0.10, 0.05, 0.05]
         }
     },
-    'oak': {
-        'initial_age': 0,
-        'maximum_biomass': 400,
-        'management_mortality_dict': {
-            'volume': [50],
-            'start_mort': [.04],
-            'impact_time': [10]
-        },
-        'stem_kargs': {
-            'carbon_content': 0.5,
-            'wood_density': 0.63,
-            'initial_carbon': 1.75,
-            'CAI_dict': {
-                'age': [1, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 200],
-                'CAI': [0.0, 3.4, 4.6, 6.9, 6.5, 8.0, 6.6, 7.6, 5, 3.5, 3, 2.5, 2.5],
-            },
-            'mortality_dict': {
-                'age': [0],
-                'mortality': [0.005],
-            },
-        },
-        'compartments_kargs': {
-            'foliage': {
-                'carbon_content': 0.5,
-                'initial_carbon': 0.28,
-                'grow_correlation_factor': 1,
-                'turnover_rate': 1.00,
-                'relative_growth_dict': {
-                    'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
-                    'relative_growth': [1, 0.8, 0.8, .8, .8, .8, .8, .8, .8, 1, 1.5, 1.5]
-                }
-            },
-            'branches': {
-                'carbon_content': 0.50,
-                'initial_carbon': 1.63,
-                'grow_correlation_factor': 1,
-                'turnover_rate': 0.02,
-                'relative_growth_dict': {
-                    'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
-                    'relative_growth': [0.7, 1.2, 0.8, 0.8, 0.3, 0.3, 0.3, 0.3, 0.35, 0.6, 0.9, 1]
-                }
-            },
-            'roots': {
-                'carbon_content': 0.5,
-                'initial_carbon': .72,
-                'grow_correlation_factor': 1,
-                'turnover_rate': 0.03,
-                'relative_growth_dict': {
-                    'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
-                    'relative_growth': [2, 1, 1, 0.5, 0.5, 0.4, 0.3, 0.3, 0.5, 0.9, 1.1, 1.4]
-                }
-            },
-        },
-        'competition': {
-            'bio_rates': [0, 0.7, 0.8, 1.0],
-            'pine': [1, 1, .8, 0],
-        },
-        'thinning_harvest_dict': {
-            'age': [10, 20, 30, 40, 50],
-            'fraction': [0.2, 0.2, 0.2, 0.2, 0.2],
-            'stems': {
-                'logwood': [0, 0, 0, 0, 0],
-                'pulpwood': [0, 0, 0, 0, 0],
-                'slash': [1.00, 1.00, 1.00, 1.00, 1.00],
-            },
-            'branches': {
-                'logwood': [0, 0, 0, 0, 0],
-                'pulpwood': [0, 0, 0, 0, 0],
-                'slash': [1.00, 1.00, 1.00, 1.00, 1.00],
-            },
-            'slash_firewood': [.9, .9, .9, .95, .95],
-            'slash_soil': [0.10, 0.10, 0.10, 0.05, 0.05]
-        }
-    }
 }
 
 SOIL_CONFIG = {

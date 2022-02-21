@@ -13,7 +13,7 @@ def optim(fraction: list):
     stimulator = Stimulator(*configs)
     stimulator(75)
     bar.update()
-    return -stimulator.carbon
+    return -sum(stimulator.carbon_table['total'])
 
 
 if __name__ == '__main__':

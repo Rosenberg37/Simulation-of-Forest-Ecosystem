@@ -43,7 +43,7 @@ class Stimulator:
 
 if __name__ == '__main__':
     simulate = Stimulator(config.BIOMASS_CONFIG, config.SOIL_CONFIG, config.PRODUCTS_CONFIG)
-    years = 1000
+    years = 100
     x = list(range(years))
     total_carbon, biomass_carbon, soil_carbon, products_carbon = list(), list(), list(), list()
 
