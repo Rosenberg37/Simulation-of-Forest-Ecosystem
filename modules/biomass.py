@@ -95,11 +95,13 @@ class Compartment:
             self,
             carbon_content: float,
             turnover_rate: float,
+            grow_correlation_factor: float,
             relative_growth_dict: dict,
             initial_carbon: float,
     ):
         self.carbon_content = carbon_content
         self.turnover_rate = turnover_rate
+        self.grow_correlation_factor = grow_correlation_factor
         self.relative_growth = list(zip(*relative_growth_dict.values()))
 
         self.biomass = initial_carbon / self.carbon_content
@@ -111,7 +113,8 @@ class Compartment:
         :param age: this age of the cohort
         :return: the turnover carbon amount to soil module.
 R       """
-        self.biomass += growth_stem * utils.polygonal(self.relative_growth, age)
+        growth = growth_stem * utils.polygonal(self.relative_growth, age)
+        self.biomass += growth * self.grow_correlation_factor
         turnover = self.turnover_rate * self.biomass
         self.biomass -= turnover
         return turnover * self.carbon_content

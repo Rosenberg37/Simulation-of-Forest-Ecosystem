@@ -29,6 +29,7 @@ BIOMASS_CONFIG = {
             'foliage': {
                 'carbon_content': 0.5,
                 'initial_carbon': 1.41,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 0.33,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -38,6 +39,7 @@ BIOMASS_CONFIG = {
             'branches': {
                 'carbon_content': 0.5,
                 'initial_carbon': 2.47,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 0.02,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -47,6 +49,7 @@ BIOMASS_CONFIG = {
             'roots': {
                 'carbon_content': 0.5,
                 'initial_carbon': 1.69,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 0.02,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -100,6 +103,7 @@ BIOMASS_CONFIG = {
             'foliage': {
                 'carbon_content': 0.5,
                 'initial_carbon': 0.28,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 1.00,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -109,6 +113,7 @@ BIOMASS_CONFIG = {
             'branches': {
                 'carbon_content': 0.50,
                 'initial_carbon': 1.63,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 0.02,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -118,6 +123,7 @@ BIOMASS_CONFIG = {
             'roots': {
                 'carbon_content': 0.5,
                 'initial_carbon': .72,
+                'grow_correlation_factor': 1,
                 'turnover_rate': 0.03,
                 'relative_growth_dict': {
                     'age': [0, 6, 10, 14, 18, 22, 25, 30, 40, 50, 100, 200],
@@ -171,29 +177,6 @@ SOIL_CONFIG = {
                 "c_nwl_lig": 0.220000,  # concentration of compound group lignin-like compounds in litter type non-woody litter
                 "c_fwl_lig": 0.320000,  # concentration of compound group lignin-like compounds in litter type fine-woody
                 "c_cwl_lig": 0.280000,  # concentration of compound group lignin-like compounds in litter type coarse-woody
-            }
-        },
-        'oak': {
-            'initial_carbons': {
-                "x_nwl": 0.450000,  # weight of organic carbon in non-woody litter compartment
-                "x_fwl": 0.962114,  # weight of organic carbon in fine-woody litter compartment
-                "x_cwl": 4.276063,  # weight of organic carbon in coarse-woody litter compartment
-                "x_ext": 0.254559,  # weight of organic carbon in each decomposition compartment extractives
-                "x_cel": 2.154067,  # weight of organic carbon in each decomposition compartment celluloses
-                "x_lig": 3.023533,  # weight of organic carbon in each decomposition compartment lignin-like compounds
-                "x_hum1": 7.723555,  # weight of organic carbon in each decomposition compartment simple humus
-                "x_hum2": 15.962174,  # weight of organic carbon in each decomposition compartment complicated humus
-            },
-            'concentration_rates': {
-                "c_nwl_ext": 0.38,  # concentration of compound group extractives in litter type non-woody litter
-                "c_fwl_ext": 0.03,  # concentration of compound group extractives in litter type fine-woody
-                "c_cwl_ext": 0.03,  # concentration of compound group extractives in litter type coarse-woody
-                "c_nwl_cel": 0.36,  # concentration of compound group celluloses in litter type non-woody litter
-                "c_fwl_cel": 0.65,  # concentration of compound group celluloses in litter type fine-woody
-                "c_cwl_cel": 0.75,  # concentration of compound group celluloses in litter type coarse-woody
-                "c_nwl_lig": 0.260000,  # concentration of compound group lignin-like compounds in litter type non-woody litter
-                "c_fwl_lig": 0.320000,  # concentration of compound group lignin-like compounds in litter type fine-woody
-                "c_cwl_lig": 0.220000,  # concentration of compound group lignin-like compounds in litter type coarse-woody
             }
         },
     },
