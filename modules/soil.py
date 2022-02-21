@@ -1,8 +1,3 @@
-from matplotlib import pyplot as plt
-
-import config
-
-
 class CohortSoil:
     def __init__(self, initial_carbons: dict, concentration_rates: dict):
         self.__dict__.update(initial_carbons)
@@ -68,15 +63,3 @@ class Soil:
     @property
     def carbon(self):
         return sum(map(lambda a: a.carbon, self.cohorts.values()))
-
-
-if __name__ == '__main__':
-    module = Soil(**config.SOIL_CONFIG)
-    years, biomass = list(range(10000)), list()
-    for i in years:
-        biomass.append(module.carbon)
-        print(f"Year:{i},"
-              f"Carbon:{module.carbon}")
-        module()
-    plt.plot(years, biomass)
-    plt.show()

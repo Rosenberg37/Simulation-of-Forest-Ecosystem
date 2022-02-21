@@ -109,22 +109,22 @@ SOIL_CONFIG = {
         },
     },
     'invasion_rates': {
-        "a_nwl": 1,  # invasion rates of litter by microbes of non-woody litter
-        "a_fwl": 0.54,  # invasion rates of litter by microbes of fine-woody litter
-        "a_cwl": 0.077,  # invasion rates of litter by microbes of coarse-woody litter
+        "a_nwl": 0.9,  # invasion rates of litter by microbes of non-woody litter
+        "a_fwl": 0.954,  # invasion rates of litter by microbes of fine-woody litter
+        "a_cwl": 0.9077,  # invasion rates of litter by microbes of coarse-woody litter
     },
     'decomposition_rates': {
-        "k_ext": 0.48,  # decomposition rate of compartment extractives
-        "k_cel": 0.3,  # decomposition rate of compartment celluloses
-        "k_lig": 0.22,  # decomposition rate of compartment lignin-like compounds
-        "k_hum1": 0.012,  # decomposition rate of compartment simple humus
-        "k_hum2": 0.0012,  # decomposition rate of compartment complicated humus
+        "k_ext": 0.98,  # decomposition rate of compartment extractives
+        "k_cel": 0.9,  # decomposition rate of compartment celluloses
+        "k_lig": 0.92,  # decomposition rate of compartment lignin-like compounds
+        "k_hum1": 0.9012,  # decomposition rate of compartment simple humus
+        "k_hum2": 0.90012,  # decomposition rate of compartment complicated humus
     },
     'subsequent_rates': {
-        "p_ext": 0.2,  # proportion of mass decomposed in compartment extractives transferred to a subsequent compartment.
-        "p_cel": 0.2,  # proportion of mass decomposed in compartment celluloses transferred to a subsequent compartment.
-        "p_lig": 0.2,  # proportion of mass decomposed in compartment lignin-like compounds transferred to a subsequent compartment.
-        "p_hum1": 0.2,  # proportion of mass decomposed in compartment simple humus  transferred to a subsequent compartment.
+        "p_ext": 0.9,  # proportion of mass decomposed in compartment extractives transferred to a subsequent compartment.
+        "p_cel": 0.9,  # proportion of mass decomposed in compartment celluloses transferred to a subsequent compartment.
+        "p_lig": 0.9,  # proportion of mass decomposed in compartment lignin-like compounds transferred to a subsequent compartment.
+        "p_hum1": 0.92,  # proportion of mass decomposed in compartment simple humus  transferred to a subsequent compartment.
     },
 }
 
